@@ -1,0 +1,24 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+           http://www.springframework.org/schema/rabbit/spring-rabbit-1.2.xsd
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="propertyResolver" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+        <property name="location" value="classpath:rabbit-demo.properties" />
+    </bean>
+
+    <rabbit:connection-factory id="connectionFactory" requested-heartbeat="3" addresses="${rabbit-hosts}" />
+
+    <rabbit:template id="receiver" connection-factory="connectionFactory" />
+
+    <rabbit:template id="dispatcher" connection-factory="connectionFactory" />
+
+    <rabbit:admin connection-factory="connectionFactory" />
+
+    <rabbit:queue id="testQueue" name="rabbit-testing" durable="false" auto-declare="true" />
+    
+</beans>
